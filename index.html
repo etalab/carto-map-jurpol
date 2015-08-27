@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+ <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+<link rel="stylesheet" href="//rawgithub.com/domoritz/leaflet-locatecontrol/gh-pages/dist/L.Control.Locate.min.css" />
+
+ <!--[if lte IE 
+8]>
+     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.ie.css" />
+ <![endif]-->
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+  <script src="leaflet-hash.js"></script>
+
+<script src="//rawgithub.com/domoritz/leaflet-locatecontrol/gh-pages/dist/L.Control.Locate.min.js" ></script>
+
+  <style>
+    body { margin:0; padding:0; }
+    #map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+<body>
+<div id='map'></div>
+<script type='text/javascript'>
+
+var
+
+tgi = L.tileLayer('tiles.php?db=tgi.mbtiles&z={z}&x={x}&y={y}', {
+// douai = L.tileLayer('http://localhost:6789/utilery-jurpol/tile/{z}/{x}/{y}.png', {
+    attribution: 'donn&eacute;es &copy; contributeurs <a href="http://osm.org/copyright">OpenStreetMap</a> + <a href="https://www.data.gouv.fr/fr/reuses/55d5fec588ee382817a46ec1/">data.gouv.fr</a>',
+    minZoom: 6, maxZoom: 14
+});
+
+
+// couche "osmfr"
+var osmfr = L.tileLayer('http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+    attribution: 'donn&eacute;es &copy; <a href="http://osm.org/copyright">OpenStreetMap</a>/ODbL - rendu cquest',
+    minZoom: 1,
+    maxZoom: 20
+});
+
+var hot = L.tileLayer('http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+    attribution: 'donn&eacute;es &copy; <a href="http://osm.org/copyright">OpenStreetMap</a>/ODbL - rendu ybon',
+    minZoom: 1,
+    maxZoom: 20
+});
+
+var osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: 'Tuiles OSM - donn&eacute;es &copy; <a href="http://osm.org/copyright">OpenStreetMap</a>/ODbL',
+    minZoom: 1,
+    maxZoom: 20
+  });
+  
+var mapquest =   L.tileLayer('http://otile1.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png', {
+    attribution: 'Tuiles <a href="http://www.mapquest.com/" target="_blank">&copy; MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png"> - donn&eacute;es &copy; <a href="http://osm.org/copyright">OpenStreetMap</a>/ODbL',
+    minZoom: 1,
+    maxZoom: 16
+  });
+
+var river =   L.tileLayer( 'http://{s}.tile.openstreetmap.fr/openriverboatmap/{z}/{x}/{y}.png', {
+    attribution: 'Calque &copy; ybon -  - donn&eacute;es &copy; <a href="http://osm.org/copyright">OpenStreetMap</a>/ODbL',
+    minZoom: 1,
+    maxZoom: 20
+  });
+
+var bw = L.tileLayer('http://www.toolserver.org/tiles/bw-mapnik/{z}/{x}/{y}.png', {
+		attribution: 'donn&eacute;es &copy; <a href="http://osm.org/copyright">OpenStreetMap</a>/ODbL',
+    minZoom: 1,
+    maxZoom: 20
+  });
+
+var relief = L.tileLayer('http://tiles2.openpistemap.org/landshaded/{z}/{x}/{y}.png', {
+	attribution: 'Relief openpistemap (source NASA SRTMv3 + ASTER)',
+    minZoom: 1,
+    maxZoom: 16
+  });
+
+
+// liste des couches de base
+var baseMaps = {
+    "OpenStreetMap France": osmfr,
+    "Rendu HOT-HDM": hot,
+    "OSM/Mapnik - international": osm,
+    "MapQuest": mapquest
+};
+
+var overlays = {
+	"TGI/Police/Gendarmerie": tgi
+};
+
+
+map = L.map('map', { center: [46.93, 2.95], zoom: 6, layers: [mapquest,tgi] } );
+
+// ajout du sélecteur de couches
+L.control.layers(baseMaps, overlays).addTo(map);
+
+// ajout géolocalisation
+L.control.locate({locateOptions: {maxZoom: 14}}).addTo(map);
+
+// ajout hash dans l'URL
+var hash = new L.Hash(map);
+
+</script>
+</body>
+</html>
